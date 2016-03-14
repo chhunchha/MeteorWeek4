@@ -1,0 +1,68 @@
+/* CSS declarations go here */
+.hidden_div{
+	display:none;
+}
+
+body {
+	padding: 60px 0px;
+}
+
+.sign-in-button {
+	position: fixed;
+	right: 200px;
+	top: 20px;
+	z-index: 1031;
+}
+
+.js-toggle-website-form {
+	position: absolute;
+	left: 10px;
+}
+
+.website {
+	padding-bottom: 10px;
+	border-bottom: 3px solid #1f6f60;
+}
+
+.js-upvote, .js-downvote {
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+.upVotes {
+	color: green;
+}
+
+.downVotes {
+	color: red;
+}
+
+.comment-input {
+	width: 80%;
+	display: inline-block;
+}
+
+.comment-add-button {
+	display: inline-block;
+}
+
+.comments {
+	padding-left: 10px;
+	max-height: 300px;
+	overflow-x:hidden;
+	overflow-y:auto;
+	width: 90%;
+}
+
+.comment {
+	border: 1px solid #cccccc;
+	border-radius: 2px;
+	margin: 5px 20px;
+	padding: 10px;
+	background: #f4f4f4;
+}
+
+.modal-body {
+	text-align: center;
+	font-weight: 500;
+}

@@ -1,0 +1,135 @@
+<head>
+  <title>siteace</title>
+</head>
+
+<body>
+	<!-- navbar  - you will be putting the login functions here -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">
+	        Site Ace
+	      </a>
+	    </div>
+	  </div>
+	</nav>
+  <div class="sign-in-button">
+    {{> loginButtons}}
+  </div>
+
+	<div class="container">
+		{{> website_form}}
+		{{> website_list}}
+	</div>
+
+  {{> msg_dialog}}
+</body>
+
+<template name="website_form">
+  {{#if isLoggedIn}}
+	<a class="btn btn-default js-toggle-website-form" href="#">
+  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+	</a>
+	<div id="website_form" class="hidden_div">
+		<form class="js-save-website-form">
+		  <div class="form-group">
+		    <label for="url">Site address</label>
+		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
+		  </div>
+		  <div class="form-group">
+		    <label for="title">Title</label>
+		    <input type="text" class="form-control" id="title" placeholder="Mysite">
+		  </div>
+		    <div class="form-group">
+		    <label for="description">Description</label>
+		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
+		  </div>
+
+		  <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+    <br/>
+  </div>
+  {{/if}}
+</template>
+
+<!-- template that displays several website items -->
+<template name="website_list">
+	<ol>
+	{{#each websites}}
+	{{>website_item}}
+	{{/each}}
+	</ol>
+</template>
+
+<!-- template that displays individual website entries -->
+<template name="website_item">
+  <li class="website">
+  	<b><a href="{{url}}">{{title}}</a></b>
+  	<p>
+  		{{description}}
+  	</p>
+    <p>
+      <small>
+        <b>Created on:  </b><i>{{prettifyDate createdOn}}</i>
+      </small>
+    </p>
+    {{#if isLoggedIn}}
+  	<a href="#" class="btn btn-default js-upvote">
+  		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+  	</a>{{/if}}
+    {{#unless isLoggedIn}} Up Votes: {{/unless}} <span class="upVotes">{{upVotes}}</span>
+    {{#if isLoggedIn}}
+  	<a href="#" class="btn btn-default js-downvote">
+  		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+  	</a>{{/if}}
+    {{#unless isLoggedIn}} | Down Votes: {{/unless}} <span class="downVotes">{{downVotes}}</span>
+    <br />
+    <br />
+  	<!-- you will be putting your up and down vote buttons in here! -->
+    {{> comment_form websiteid=_id}}
+    <h5>Comments: </h5>
+    <div class="comments">
+      {{#unless comments}}
+        <div class="row comment">
+          No Comments yet.
+        </div>
+      {{/unless}}
+      {{#each comments}}
+        <div class="row comment">
+          {{comment}} <br />
+          <small>
+            <b>By  </b><i>{{getUser createdBy}}</i><b> on </b> <i>{{prettifyDate createdOn}}</i>
+          </small>
+        </div>
+      {{/each}}
+
+    </div>
+
+  </li>
+  <br />
+</template>
+
+<template name="comment_form">
+  {{#if isLoggedIn}}
+	<div id="comment_form">
+		<form class="js-comment-form">
+		  <div class="form-group">
+		    <input type="text" class="form-control comment-input" id="comment" placeholder="comment">
+        <button type="submit" class="btn btn-default comment-add-button">Add</button>
+      </div>
+		</form>
+  </div>
+  {{/if}}
+</template>
+
+<template name="msg_dialog">
+  <div class="modal fade" tabindex="-1" role="dialog" id="msg_dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>{{getMessage}}</p>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</template>
