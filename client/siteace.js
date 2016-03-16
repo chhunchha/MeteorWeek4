@@ -312,7 +312,7 @@ if (Meteor.isClient) {
 				{"instruction":`On the detail page, users can post comments about a webpage, and they are displayed below the description of the webpage.`},
 				{"instruction":`Challenge 1: Automatic information - When you type URL in input it will automatically get the information about site if found. See message for url`},
 				{"instruction":`Challenge 2: Search function - Search will look for Site starting with search text - case incensitive. Use clear button or delete input text to go back to all list`},
-				{"instruction":`Challenge 3: Website recommender - Up vote one of the site with receipie and recommended sites will be displayes with match`}
+				{"instruction":`Challenge 3: Website recommender - Up vote one of the site and recommended sites will be displayes with match`}
 			];
 		}
 	});
