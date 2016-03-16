@@ -12,11 +12,25 @@ body {
 	right: 200px;
 	top: 20px;
 	z-index: 1031;
+	font-size: 16px;
+}
+
+.instruction-button {
+	position: fixed;
+	right: 10px;
+	top: 20px;
+	z-index: 1031;
+	font-size: 16px;
 }
 
 .js-toggle-website-form {
-	position: absolute;
-	left: 10px;
+	/*position: absolute;*/
+	/*float:right;
+	margin-bottom: 10px;*/
+}
+
+.recommentations-link {
+	float: right;
 }
 
 .website {
@@ -62,7 +76,7 @@ body {
 	background: #f4f4f4;
 }
 
-.modal-body {
+#msg_dialog .modal-body {
 	text-align: center;
 	font-weight: 500;
 }

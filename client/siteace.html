@@ -4,109 +4,212 @@
 
 <body>
 	<!-- navbar  - you will be putting the login functions here -->
-	<nav class="navbar navbar-default navbar-fixed-top">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="#">
-	        Site Ace
-	      </a>
-	    </div>
-	  </div>
-	</nav>
+
+</body>
+
+<template name="ApplicationLayout">
+  {{> yield "navbar"}}
+  {{> yield "main"}}
+</template>
+
+<template name="navabar_template">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          Site Ace
+        </a>
+      </div>
+      <ul class="nav navbar-nav">
+          <li class="active nav-item">
+              <a href="/"> Home </a>
+          </li>
+          <li class="nav-item">
+              <a href="/recommendations"> Recommendations </a>
+          </li>
+      </ul>
+    </div>
+  </nav>
+
   <div class="sign-in-button">
     {{> loginButtons}}
   </div>
 
-	<div class="container">
-		{{> website_form}}
-		{{> website_list}}
-	</div>
+  <div class="instruction-button">
+    <a href="#">Instructions</a>
+  </div>
+  {{> instructions_dialog}}
+</template>
+
+<template name="websites_main">
+  <div class="container">
+    {{> website_form}}
+    {{> website_list}}
+  </div>
 
   {{> msg_dialog}}
-</body>
+</template>
 
 <template name="website_form">
-  {{#if isLoggedIn}}
-	<a class="btn btn-default js-toggle-website-form" href="#">
-  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-	</a>
-	<div id="website_form" class="hidden_div">
-		<form class="js-save-website-form">
-		  <div class="form-group">
-		    <label for="url">Site address</label>
-		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
-		  </div>
-		  <div class="form-group">
-		    <label for="title">Title</label>
-		    <input type="text" class="form-control" id="title" placeholder="Mysite">
-		  </div>
-		    <div class="form-group">
-		    <label for="description">Description</label>
-		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
-		  </div>
+    <div class="container">
+      {{#if isLoggedIn}}
+    	<a class="btn btn-primary js-toggle-website-form" href="#">
+      		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    	</a>
+        <a class="recommentations-link" href="/recommendations">
+            <span>Recommendations</span>
+        </a>
+      <br />
+    	<div id="website_form" class="hidden_div">
+    		<form class="js-save-website-form">
+    		  <div class="form-group">
+    		    <label for="url">Site address</label>
+            {{#if showUrlMessage}}
+              <span>url must be absolute and start with http:// or https:// </span>
+            {{/if}}
+    		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
+    		  </div>
+    		  <div class="form-group">
+    		    <label for="title">Title</label>
+    		    <input type="text" class="form-control" id="title" placeholder="Mysite">
+    		  </div>
+    		    <div class="form-group">
+    		    <label for="description">Description</label>
+    		    <input type="text" class="form-control" id="description" placeholder="I found this site really useful for ...">
+    		  </div>
 
-		  <button type="submit" class="btn btn-default">Submit</button>
-		</form>
+    		  <button type="submit" class="btn btn-success">Submit</button>
+          {{#if isFetchingInfo}}
+            <span><small>Fetching information inprogress</small></span>
+          {{/if}}
+        </form>
+        <hr />
+      </div>
+      {{/if}}
+    </div>
     <br/>
-  </div>
-  {{/if}}
 </template>
 
 <!-- template that displays several website items -->
 <template name="website_list">
-	<ol>
-	{{#each websites}}
-	{{>website_item}}
-	{{/each}}
-	</ol>
+  <div class="container">
+    <div class="row">
+      <!-- <span class="col-md-1 col-xs-1"></span> -->
+      <span class="col-md-5 col-xs-8">
+        <input class="search_site  form-control" type="text" placeholder="Search site" id="search_site" />
+      </span>
+      <span class="col-md-2 col-xs-2">
+        <button id="search_clear" class="btn btn-default search_clear">Clear</button>
+      </span>
+    </div>
+  </div>
+    <br />
+  <div class="container">
+    <ol>
+    	{{#each websites}}
+    	{{>website_item}}
+    	{{/each}}
+  	</ol>
+  </div>
 </template>
 
 <!-- template that displays individual website entries -->
 <template name="website_item">
-  <li class="website">
-  	<b><a href="{{url}}">{{title}}</a></b>
-  	<p>
-  		{{description}}
-  	</p>
-    <p>
-      <small>
-        <b>Created on:  </b><i>{{prettifyDate createdOn}}</i>
-      </small>
-    </p>
-    {{#if isLoggedIn}}
-  	<a href="#" class="btn btn-default js-upvote">
-  		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-  	</a>{{/if}}
-    {{#unless isLoggedIn}} Up Votes: {{/unless}} <span class="upVotes">{{upVotes}}</span>
-    {{#if isLoggedIn}}
-  	<a href="#" class="btn btn-default js-downvote">
-  		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-  	</a>{{/if}}
-    {{#unless isLoggedIn}} | Down Votes: {{/unless}} <span class="downVotes">{{downVotes}}</span>
+    <li class="website">
+    	<b><a target="_blank" href="{{url}}">{{title}}</a></b>
+      <!-- <b><a href="/website/{{_id}}">{{title}}</a></b> -->
+    	<p>
+    		{{description}}
+    	</p>
+      <p>
+        <small>
+          <b>Created on:  </b><i>{{prettifyDate createdOn}}</i>
+        </small>
+      </p>
+      {{#if isLoggedIn}}
+    	<a href="#" class="btn btn-success js-upvote">
+    		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+    	</a>{{/if}}
+      {{#unless isLoggedIn}} Up Votes: {{/unless}} <span class="upVotes">{{upVotes}}</span>
+      {{#if isLoggedIn}}
+    	<a href="#" class="btn btn-danger js-downvote">
+    		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+    	</a>{{/if}}
+      {{#unless isLoggedIn}} | Down Votes: {{/unless}} <span class="downVotes">{{downVotes}}</span>
+      <br />
+      <br />
+      <b><a href="/website/{{_id}}">Read more...</a></b>
+    </li>
     <br />
-    <br />
-  	<!-- you will be putting your up and down vote buttons in here! -->
-    {{> comment_form websiteid=_id}}
-    <h5>Comments: </h5>
-    <div class="comments">
-      {{#unless comments}}
-        <div class="row comment">
-          No Comments yet.
-        </div>
-      {{/unless}}
-      {{#each comments}}
-        <div class="row comment">
-          {{comment}} <br />
-          <small>
-            <b>By  </b><i>{{getUser createdBy}}</i><b> on </b> <i>{{prettifyDate createdOn}}</i>
-          </small>
-        </div>
-      {{/each}}
+</template>
 
+<template name="website_item_with_comments">
+  <div class="container">
+    <div class="website">
+    	<b><a target="_blank" href="{{url}}">{{title}}</a></b>
+    	<p>
+    		{{description}}
+    	</p>
+      <p>
+        <small>
+          <b>Created on:  </b><i>{{prettifyDate createdOn}}</i>
+        </small>
+      </p>
+      {{#if isLoggedIn}}
+    	<a href="#" class="btn btn-success js-upvote">
+    		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+    	</a>{{/if}}
+      {{#unless isLoggedIn}} Up Votes: {{/unless}} <span class="upVotes">{{upVotes}}</span>
+      {{#if isLoggedIn}}
+    	<a href="#" class="btn btn-danger js-downvote">
+    		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+    	</a>{{/if}}
+      {{#unless isLoggedIn}} | Down Votes: {{/unless}} <span class="downVotes">{{downVotes}}</span>
+      <br />
+      <br />
+    	<!-- you will be putting your up and down vote buttons in here! -->
+      {{> comment_form websiteid=_id}}
+      <h5>Comments: </h5>
+      <div class="comments">
+        {{#unless comments}}
+          <div class="row comment">
+            No Comments yet.
+          </div>
+        {{/unless}}
+        {{#each comments}}
+          <div class="row comment">
+            {{comment}} <br />
+            <small>
+              <b>By  </b><i>{{getUser createdBy}}</i><b> on </b> <i>{{prettifyDate createdOn}}</i>
+            </small>
+          </div>
+        {{/each}}
+      </div>
     </div>
-
-  </li>
+  </div>
   <br />
+</template>
+
+<template name="recommended_websites">
+  <div class="container">
+    <h3>Recommended Websites</h3>
+    {{#unless lastUpVotedWebsite}}
+    - Please upvote one website to see recommendations based on that.
+    {{/unless}}
+    {{#if lastUpVotedWebsite}}
+        {{#unless recommended_websites}}
+            <h4>No Recommendations found. <br />May be when we have more sites listed something will match.</h4>
+        {{/unless}}
+    {{/if}}
+    {{#if recommended_websites}}
+        <ol>
+          <h4>Based on last up voted site by you - {{lastUpVotedWebsite}}</h4>
+        	{{#each recommended_websites}}
+        	   {{>website_item}}
+        	{{/each}}
+      	</ol>
+    {{/if}}
+  </div>
 </template>
 
 <template name="comment_form">
@@ -115,7 +218,7 @@
 		<form class="js-comment-form">
 		  <div class="form-group">
 		    <input type="text" class="form-control comment-input" id="comment" placeholder="comment">
-        <button type="submit" class="btn btn-default comment-add-button">Add</button>
+        <button type="submit" class="btn btn-primary comment-add-button">Add</button>
       </div>
 		</form>
   </div>
@@ -128,6 +231,25 @@
       <div class="modal-content">
         <div class="modal-body">
           <p>{{getMessage}}</p>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</template>
+
+<template name="instructions_dialog">
+  <div class="modal fade" tabindex="-1" role="dialog" id="instructions_dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <ol>
+            <!-- {{getInstructions}} -->
+            {{#each getInstructions}}
+              <li>
+                {{instruction}}
+              </li>
+            {{/each}}
+          </ol>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

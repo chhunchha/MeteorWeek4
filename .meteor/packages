@@ -22,3 +22,6 @@ twbs:bootstrap
 accounts-ui
 accounts-password
 http
+json
+acemtp:meta-extractor
+iron:router
